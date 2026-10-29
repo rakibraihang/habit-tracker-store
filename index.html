@@ -624,7 +624,7 @@ function vSuccess(){const o=(S.orders||[]).find(x=>x.id===SV.last);if(!o)return 
 function vOrders(){const O=S.orders||[];if(!O.length)return `<div class="spbox" style="text-align:center;padding:40px"><h3 class="sf" style="margin:0 0 8px">No orders yet</h3><p class="mu">Sign in and place a confirmed COD order to see it here. Old local orders are not server-confirmed.</p><button class="spbtn" style="padding:0 22px;display:inline-flex" data-sp="go|store">Start shopping</button></div>`;return O.map(o=>`<div class="spbox" style="margin-bottom:12px"><div class="spr"><b>${esc(o.id)}</b><span class="spst">${esc(o.st)}</span></div><div class="mu" style="font-size:13px">${new Date(o.t).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})}</div>${o.items.map(i=>`<div class="spr"><span>${esc(i.n)} × ${i.q}</span><span>${mny(i.u*i.q)}</span></div>`).join("")}<div class="spr"><b>Total</b><b>${mny(o.tot)}</b></div>${o.serverSaved?'<small class="mu">Saved in Supabase</small>':'<small class="mu">Local history only — not submitted to the server</small>'}<a class="spbtn o" href="${waLink(o)}" target="_blank" rel="noopener">Send order on WhatsApp</a></div>`).join("")}
 let SERVER_ORDERS_LOADING=false;
 async function refreshServerOrders(){
- if(SERVER_ORDERS_LOADING||!STORE_CLIENT||!STORE_PRODUCTS_LIVE||SV.v!=="orders")return;
+ if(SERVER_ORDERS_LOADING||!STORE_CLIENT||SV.v!=="orders")return;
  SERVER_ORDERS_LOADING=true;
  try{
   const {data:sessionData}=await STORE_CLIENT.auth.getSession();
