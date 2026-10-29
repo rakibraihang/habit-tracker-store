@@ -7,13 +7,13 @@ import tempfile
 import sys
 
 html = Path("index.html").read_text(encoding="utf-8")
-scripts = re.findall(r"<script\\b([^>]*)>([\\s\\S]*?)</script\\s*>", html, re.IGNORECASE)
+scripts = re.findall(r"<script\b([^>]*)>([\s\S]*?)</script\s*>", html, re.IGNORECASE)
 checked = 0
 with tempfile.TemporaryDirectory() as tmp:
     for index, (attrs, source) in enumerate(scripts):
-        if re.search(r"\\bsrc\\s*=", attrs, re.IGNORECASE):
+        if re.search(r"\bsrc\s*=", attrs, re.IGNORECASE):
             continue
-        kind = re.search(r"""\\btype\\s*=\\s*["']?([^"'\\s>]+)""", attrs, re.IGNORECASE)
+        kind = re.search(r"""\btype\s*=\s*["']?([^"'\s>]+)""", attrs, re.IGNORECASE)
         if kind and kind.group(1).lower() not in ("text/javascript", "application/javascript", "module"):
             continue
         path = Path(tmp) / f"inline-{index}.js"
