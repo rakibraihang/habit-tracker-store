@@ -641,7 +641,7 @@ async function refreshServerOrders(){
 function renderStore(){const n=cartN(),b=document.getElementById("cbdg"),hb=document.getElementById("hcb"),fc=document.getElementById("fcart");if(b)b.textContent=n||"";if(hb)hb.textContent=n||"";if(fc){const t=split().tot-split().dl;fc.hidden=!n||!!SV.pg||["cart","checkout","success"].includes(SV.v);fc.innerHTML=`<span class="a"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.6 12.4a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.5L21 8H6"/></svg>${n} item${n>1?"s":""}</span><span class="b">${mny(t)}</span>`}const sh=document.getElementById("shop"),el=document.getElementById("store");if(!el||!sh||(sh.hidden&&!window.inRS))return;
  if(SV.pg&&PGS[SV.pg]){el.innerHTML='<button class="spbtn o" style="padding:0 16px;display:inline-flex;margin-bottom:14px" data-pg="back">← Back to store</button>'+PGS[SV.pg]();document.getElementById("sp-list").hidden=true;return}
  const cur=SV.v==="detail"?"store":(SV.v==="checkout"||SV.v==="success")?"cart":SV.v;
- let h='<nav class="spn" aria-label="Store menu">'+[["store","Store"],["cart","Cart"+(n?" ("+n+")":"")],["orders","My Orders"]].map(t=>`<button data-sp="go|${t[0]}" class="${t[0]===cur?"on":""}">${t[1]}</button>`).join("")+"</nav>";
+ let h='<nav class="spn" aria-label="Store menu">'+[["store","Store"],["cart","Cart"+(n?" ("+n+")":"")],["orders","My Orders"],["admin","Manage products"]].map(t=>`<button data-sp="go|${t[0]}" class="${t[0]===cur?"on":""}">${t[1]}</button>`).join("")+"</nav>";
  const V={store:vStore,detail:vDetail,admin:adminPanel,cart:vCart,checkout:vCheckout,success:vSuccess,orders:vOrders};if(SV.v!=="list")h+=(V[SV.v]||vStore)();
  el.innerHTML=h;const o=document.getElementById("spo");if(o)o.value=SV.o;document.getElementById("sp-list").hidden=SV.v!=="list";
  if(SV.v==="list"){window.inRS=true;try{renderShop()}finally{window.inRS=false}}if(SV.v==="orders")refreshServerOrders()}
@@ -788,4 +788,5 @@ renderTP();
 })();
 </script>
 
+<script src="./admin-manager.js" defer></script>
 </body></html>
