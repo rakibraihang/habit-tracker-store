@@ -69,6 +69,7 @@ renderStore();toast&&toast(notice)
 }catch(err){notice=String(err&&err.message||'Save failed');toast&&toast(notice);renderStore()}
 finally{var b=form.querySelector('button[type="submit"]');if(b){b.disabled=false;b.textContent=create?'Create product':'Save product'}}
 }
+window.renderAdminPanel=adminPanel;
 window.adminPanel=adminPanel;
 window.openAdmin=openAdmin;
 document.addEventListener('click',function(e){var b=e.target.closest('[data-sp]');if(!b)return;var parts=b.dataset.sp.split('|');var a=parts[0];if(a==='admin'||(a==='go'&&parts[1]==='admin')){e.preventDefault();openAdmin()}});
