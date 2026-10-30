@@ -2,7 +2,7 @@
 "use strict";
 var notice="", products=[];
 function escA(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
-function field(label,name,value,type,extra){return '<label class="admf" style="display:flex;flex-direction:column;gap:5px;font-size:13px">'+label+'<input name="'+name+'" type="'+(type||"text")+'" value="'+escA(value)+'" '+(extra||"")+' required style="width:100%;min-width:0;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)"></label>'}
+function field(label,name,value,type,extra){return '<label class="admf" style="display:flex;flex-direction:column;gap:5px;font-size:13px">'+label+'<input name="'+name+'" type="'+(type||"text")+'" value="'+escA(value)+'" '+(extra||"")+(name==='stock_quantity'?'':' required')+' style="width:100%;min-width:0;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)"></label>'}
 function selectField(label,name,value,opts){return '<label class="admf" style="display:flex;flex-direction:column;gap:5px;font-size:13px">'+label+'<select name="'+name+'" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)">'+opts.map(function(o){return '<option value="'+o[0]+'"'+(value===o[0]?' selected':'')+'>'+o[1]+'</option>'}).join("")+'</select></label>'}
 function productForm(p){
 var id=p.id, published=!!p.is_published;
