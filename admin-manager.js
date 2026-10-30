@@ -37,21 +37,21 @@ field('Image path (product-images bucket)','image_path','','text','maxlength="50
 '<h3 class="sf" style="font-size:20px">Existing products ('+products.length+')</h3>'+existing+'</section>'
 }
 async function loadProducts(){
-if(!window.STORE_CLIENT)return false;
-var session=await window.STORE_CLIENT.auth.getSession();
+if(!STORE_CLIENT)return false;
+var session=await STORE_CLIENT.auth.getSession();
 if(session.error||!session.data||!session.data.session){notice='Sign in first using the Cloud Backup panel, then reopen Manage products.';return false}
-var res=await window.STORE_CLIENT.functions.invoke('admin-products',{method:'GET'});
+var res=await STORE_CLIENT.functions.invoke('admin-products',{method:'GET'});
 if(res.error||!res.data||!Array.isArray(res.data.products)){notice=(res.data&&res.data.error)||(res.error&&res.error.message)||'Could not load products.';return false}
 products=res.data.products;notice='Products loaded securely.';return true
 }
 async function openAdmin(){
-if(!window.STORE_CLIENT){notice='Store client is still loading. Try again in a moment.';window.toast&&window.toast(notice);return}
-var session=await window.STORE_CLIENT.auth.getSession();
-if(session.error||!session.data||!session.data.session){window.toast&&window.toast('Sign in first in the Cloud Backup panel. Then select Manage products.');return}
-window.show('shopping');window.SV.pg=null;window.SV.v='admin';notice='Loading secure product manager…';window.renderStore();
+if(!STORE_CLIENT){notice='Store client is still loading. Try again in a moment.';toast&&toast(notice);return}
+var session=await STORE_CLIENT.auth.getSession();
+if(session.error||!session.data||!session.data.session){toast&&toast('Sign in first in the Cloud Backup panel. Then select Manage products.');return}
+show('shopping');SV.pg=null;SV.v='admin';notice='Loading secure product manager…';renderStore();
 var ok=await loadProducts();
-window.renderStore();
-if(!ok&&window.toast)window.toast(notice)
+renderStore();
+if(!ok&&toast)toast(notice)
 }
 async function saveProduct(form){
 var create=form.id==='admin-create',id=form.getAttribute('data-admin-product'),fd=new FormData(form),body={};
@@ -60,17 +60,17 @@ body.price=Number(body.price);body.stock_quantity=body.stock_quantity===''?null:
 if(!create)body.id=id;
 var btn=form.querySelector('button[type="submit"]');if(btn){btn.disabled=true;btn.textContent='Saving…'}
 try{
-var res=await window.STORE_CLIENT.functions.invoke('admin-products',{method:create?'POST':'PATCH',body:body});
+var res=await STORE_CLIENT.functions.invoke('admin-products',{method:create?'POST':'PATCH',body:body});
 if(res.error||(res.data&&res.data.error))throw new Error((res.data&&res.data.error)||(res.error&&res.error.message)||'Could not save product');
 notice=create?'Product created.':'Product saved.';
 await loadProducts();
-await window.initLiveStore();
-window.renderStore();window.toast&&window.toast(notice)
-}catch(err){notice=String(err&&err.message||'Save failed');window.toast&&window.toast(notice);window.renderStore()}
+await initLiveStore();
+renderStore();toast&&toast(notice)
+}catch(err){notice=String(err&&err.message||'Save failed');toast&&toast(notice);renderStore()}
 finally{var b=form.querySelector('button[type="submit"]');if(b){b.disabled=false;b.textContent=create?'Create product':'Save product'}}
 }
 window.adminPanel=adminPanel;
 window.openAdmin=openAdmin;
-document.addEventListener('click',function(e){var b=e.target.closest('[data-sp]');if(!b)return;var a=b.dataset.sp.split('|')[0];if(a==='admin'){e.preventDefault();openAdmin()}});
+document.addEventListener('click',function(e){var b=e.target.closest('[data-sp]');if(!b)return;var parts=b.dataset.sp.split('|');var a=parts[0];if(a==='admin'||(a==='go'&&parts[1]==='admin')){e.preventDefault();openAdmin()}});
 document.addEventListener('submit',function(e){var f=e.target.closest('#admin-create,.admin-product-form');if(!f)return;e.preventDefault();saveProduct(f)});
 })();
