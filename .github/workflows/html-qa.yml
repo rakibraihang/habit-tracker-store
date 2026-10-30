@@ -20,3 +20,5 @@ jobs:
           python-version: "3.x"
       - name: Check inline JavaScript syntax
         run: python tests/check_html_scripts.py
+      - name: Check external JavaScript syntax
+        run: node --check admin-manager.js
