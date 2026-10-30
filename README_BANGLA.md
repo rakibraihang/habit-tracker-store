@@ -6,13 +6,24 @@
 - `SUPABASE_SETUP_ALL_IN_ONE.sql`: Supabase SQL Editor-এ চালানোর combined setup script
 - `VERIFY_SETUP.sql`: setup যাচাইয়ের SQL
 
-## গুরুত্বপূর্ণ অবস্থা
-- ফ্রন্টএন্ডে Supabase project URL এবং publishable key configured আছে।
-- SQL script এখনো live Supabase project-এ চালানো/যাচাই করা হয়নি।
-- Cloud Backup কাজ করতে `user_app_state` table ও RLS policy তৈরি থাকা দরকার।
-- Store-এর product/cart/checkout এখনও সম্পূর্ণ Supabase backend-এ wired নয়; বর্তমান Store flow local demo-ধরনের।
-- Edge Function source দেওয়া আছে, কিন্তু live project-এ deploy করা হয়নি।
-- কোনো `service_role` key/password/token এই package-এ থাকা উচিত নয়।
+## বর্তমান অবস্থা
+
+- Frontend GitHub Pages-এ deploy হয়; Supabase project connected।
+- Habit Tracker cloud backup এবং Supabase data tables-এর RLS configured।
+- Store catalog Supabase-এর published products থেকে load হয়।
+- COD order-এর জন্য secure create-order Edge Function আছে; server-side price/stock validation করে এবং payment unpaid রাখে।
+- Secure product manager-এর জন্য admin-products Edge Function ও Manage products UI যোগ করা হয়েছে।
+- Admin access শুধু server-side profiles.role = admin যাচাইয়ের পর মেলে।
+- কোনো বাস্তব product/order/payment seed করা হয়নি। Product manager-এ যোগ করা নতুন item default-এ unpublished থাকবে।
+- bKash/Nagad/Rocket/card payment ও digital fulfilment এখনো enabled নয়। Real payment নেওয়ার আগে provider integration এবং server-side payment verification দরকার।
+- Launch steps ও test checklist: STORE_LAUNCH_GUIDE_BANGLA.md
+
+## নিরাপত্তা
+
+- Browser code-এ শুধু publishable key রাখা যাবে; service-role key বা database secret কখনো নয়।
+- Public schema-এর সব ১৩টি table-এ RLS enabled।
+- Admin function-এ JWT/session এবং admin role server-side যাচাই হয়।
+- Product delete না করে unpublish করার workflow রাখা হয়েছে যাতে পুরোনো order reference অক্ষত থাকে।
 
 ## GitHub-এ আপলোড
 1. ZIP extract করো।
