@@ -642,7 +642,7 @@ function renderStore(){const n=cartN(),b=document.getElementById("cbdg"),hb=docu
  if(SV.pg&&PGS[SV.pg]){el.innerHTML='<button class="spbtn o" style="padding:0 16px;display:inline-flex;margin-bottom:14px" data-pg="back">← Back to store</button>'+PGS[SV.pg]();document.getElementById("sp-list").hidden=true;return}
  const cur=SV.v==="detail"?"store":(SV.v==="checkout"||SV.v==="success")?"cart":SV.v;
  let h='<nav class="spn" aria-label="Store menu">'+[["store","Store"],["cart","Cart"+(n?" ("+n+")":"")],["orders","My Orders"],["admin","Manage products"]].map(t=>`<button data-sp="go|${t[0]}" class="${t[0]===cur?"on":""}">${t[1]}</button>`).join("")+"</nav>";
- const V={store:vStore,detail:vDetail,admin:adminPanel,cart:vCart,checkout:vCheckout,success:vSuccess,orders:vOrders};if(SV.v!=="list")h+=(V[SV.v]||vStore)();
+ const V={store:vStore,detail:vDetail,admin:(window.renderAdminPanel||adminPanel),cart:vCart,checkout:vCheckout,success:vSuccess,orders:vOrders};if(SV.v!=="list")h+=(V[SV.v]||vStore)();
  el.innerHTML=h;const o=document.getElementById("spo");if(o)o.value=SV.o;document.getElementById("sp-list").hidden=SV.v!=="list";
  if(SV.v==="list"){window.inRS=true;try{renderShop()}finally{window.inRS=false}}if(SV.v==="orders")refreshServerOrders()}
 async function placeOrder(){const s=split(),F=SV.f,E={};
